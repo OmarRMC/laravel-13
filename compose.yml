@@ -1,0 +1,44 @@
+name: laravel13
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.4}
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    image: laravel13-app:${PHP_VERSION:-8.4}
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "${APP_PORT:-8000}:8000"     # aplicacion
+      - "${VITE_PORT:-5173}:5173"    # Vite / HMR
+    environment:
+      # Sin esto el servidor embebido atiende una sola peticion a la vez
+      PHP_CLI_SERVER_WORKERS: 4
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_DB_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-laravel}
+      POSTGRES_USER: ${POSTGRES_USER:-laravel}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-laravel} -d ${POSTGRES_DB:-laravel}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pg-data:
