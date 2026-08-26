@@ -1,0 +1,28 @@
+# Entorno Docker (contiene puertos, UID/GID y credenciales de PostgreSQL)
+/.env
+/.env.*
+!/.env.example
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores / IDEs
+/.idea/
+/.vscode/
+/.zed/
+/.nova/
+/.fleet/
+*.swp
+*.swo
+*~
+
+/.claude/
+/.codex/
+/.cursor/
+
+*.log
+/dump.sql
+/*.sql.gz
+
