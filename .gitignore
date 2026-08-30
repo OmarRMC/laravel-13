@@ -25,4 +25,4 @@ desktop.ini
 *.log
 /dump.sql
 /*.sql.gz
-
+/docs
