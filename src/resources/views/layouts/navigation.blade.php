@@ -13,8 +13,29 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        Panel
                     </x-nav-link>
+
+                    <x-nav-link :href="route('eventos.index')" :active="request()->routeIs('eventos.*')">
+                        Eventos
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('inscripciones.index')" :active="request()->routeIs('inscripciones.*')">
+                        Mis inscripciones
+                    </x-nav-link>
+
+                    {{-- Los Gates deciden que se ve: mismo criterio que el can: de las rutas. --}}
+                    @can('crear eventos')
+                        <x-nav-link :href="route('panel.eventos.index')" :active="request()->routeIs('panel.*')">
+                            Organizar
+                        </x-nav-link>
+                    @endcan
+
+                    @can('ver-panel-admin')
+                        <x-nav-link :href="route('admin.categorias.index')" :active="request()->routeIs('admin.*')">
+                            Administrar
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -68,8 +89,28 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                Panel
             </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('eventos.index')" :active="request()->routeIs('eventos.*')">
+                Eventos
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('inscripciones.index')" :active="request()->routeIs('inscripciones.*')">
+                Mis inscripciones
+            </x-responsive-nav-link>
+
+            @can('crear eventos')
+                <x-responsive-nav-link :href="route('panel.eventos.index')" :active="request()->routeIs('panel.*')">
+                    Organizar
+                </x-responsive-nav-link>
+            @endcan
+
+            @can('ver-panel-admin')
+                <x-responsive-nav-link :href="route('admin.categorias.index')" :active="request()->routeIs('admin.*')">
+                    Administrar
+                </x-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->

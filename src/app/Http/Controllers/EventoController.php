@@ -14,6 +14,7 @@ class EventoController extends Controller
      * Un solo metodo para las tres. La diferencia la marca el parametro opcional,
      * no el codigo: si llega una categoria, filtra; si no, lista todo.
      */
+    // eventos/categoria/categori-test1
     public function index(?Categoria $categoria = null): View
     {
         $eventos = Evento::query()
@@ -21,7 +22,7 @@ class EventoController extends Controller
             ->proximos()
             ->when($categoria, fn ($q) => $q->where('categoria_id', $categoria->id))
             ->with(['categoria', 'organizador'])
-            ->paginate(12)
+            ->paginate(1)
             ->withQueryString();
 
         return view('eventos.index', [

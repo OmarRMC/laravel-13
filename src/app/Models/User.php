@@ -23,6 +23,17 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * El default de `users.activo` vive tambien aqui, no solo en la migracion.
+     *
+     * Una instancia recien creada en memoria no lleva el valor que puso la base
+     * de datos: `$user->activo` seria null y el middleware `activo` la expulsaria
+     * hasta que alguien hiciera un refresh().
+     */
+    protected $attributes = [
+        'activo' => true,
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
