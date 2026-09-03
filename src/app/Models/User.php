@@ -32,7 +32,16 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'activo' => 'boolean',
         ];
+    }
+
+    public function tieneRol(string|array $roles): bool
+    {
+        return $this->loadMissing('roles')
+            ->roles
+            ->whereIn('nombre', (array) $roles)
+            ->isNotEmpty();
     }
 
     protected function name(): Attribute

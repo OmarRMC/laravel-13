@@ -14,6 +14,12 @@ class Categoria extends Model
 
     protected $fillable = ['nombre', 'slug', 'color'];
 
+    /** /eventos/categoria/tecnologia — el filtro publico entra por slug. */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     // Relaciones
 
     /** 1:N los eventos de esta categoria. */

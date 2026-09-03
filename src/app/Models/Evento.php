@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,6 +28,30 @@ class Evento extends Model
             'es_gratuito' => 'boolean',
             'precio'      => 'decimal:2',
         ];
+    }
+
+    /**
+     * Las URLs publicas usan el slug, no el id: /eventos/laravel-13-desde-cero.
+     *
+     * Sin esto el binding implicito busca por `id` y `slug` unique no sirve de nada.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    // Scopes
+
+    /** Solo lo que puede ver un visitante. */
+    public function scopePublicado(Builder $query): Builder
+    {
+        return $query->where('estado', 'publicado');
+    }
+
+    /** Lo que todavia no ha empezado, en orden cronologico. Usa el indice (estado, inicia_el). */
+    public function scopeProximos(Builder $query): Builder
+    {
+        return $query->where('inicia_el', '>=', now())->orderBy('inicia_el');
     }
 
     // Relaciones
