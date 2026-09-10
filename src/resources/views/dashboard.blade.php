@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Hola, {{ auth()->user()->name }}
+            {{ __('Hello, :name', ['name' => auth()->user()->name]) }}
         </h2>
     </x-slot>
 
@@ -11,33 +11,33 @@
             <div class="grid gap-4 sm:grid-cols-3">
                 <a href="{{ route('eventos.index') }}"
                    class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6 hover:shadow transition">
-                    <h3 class="font-semibold">Catálogo</h3>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Buscar eventos e inscribirse</p>
+                    <h3 class="font-semibold">{{ __('Catalog') }}</h3>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('Browse events and register') }}</p>
                 </a>
 
                 @can('crear eventos')
                     <a href="{{ route('panel.eventos.index') }}"
                        class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6 hover:shadow transition">
-                        <h3 class="font-semibold">Panel del organizador</h3>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Mis eventos e inscritos</p>
+                        <h3 class="font-semibold">{{ __('Organizer Panel') }}</h3>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('My events and registrants') }}</p>
                     </a>
                 @endcan
 
                 @can('ver-panel-admin')
                     <a href="{{ route('admin.categorias.index') }}"
                        class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6 hover:shadow transition">
-                        <h3 class="font-semibold">Administración</h3>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Categorías y usuarios</p>
+                        <h3 class="font-semibold">{{ __('Administration') }}</h3>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('Categories and users') }}</p>
                     </a>
                 @endcan
             </div>
 
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-semibold">Mis próximas inscripciones</h3>
+                    <h3 class="font-semibold">{{ __('My Upcoming Registrations') }}</h3>
                     <a href="{{ route('inscripciones.index') }}"
                        class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
-                        Ver todas
+                        {{ __('View All') }}
                     </a>
                 </div>
 
@@ -55,7 +55,7 @@
                     </div>
                 @empty
                     <p class="text-sm text-gray-500 dark:text-gray-400">
-                        Sin inscripciones todavía.
+                        {{ __('No registrations yet.') }}
                     </p>
                 @endforelse
             </div>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Nueva categoría
+            {{ __('New Category') }}
         </h2>
     </x-slot>
 
@@ -14,9 +14,9 @@
                     @include('admin.categorias.partials.form', ['categoria' => null])
 
                     <div class="mt-8 flex items-center gap-4">
-                        <x-primary-button>Crear</x-primary-button>
+                        <x-primary-button>{{ __('Create') }}</x-primary-button>
                         <a href="{{ route('admin.categorias.index') }}"
-                           class="text-sm text-gray-600 dark:text-gray-400 hover:underline">Cancelar</a>
+                           class="text-sm text-gray-600 dark:text-gray-400 hover:underline">{{ __('Cancel') }}</a>
                     </div>
                 </form>
             </div>

@@ -1,17 +1,17 @@
-<x-layout-publico :titulo="$categoria?->nombre ?? 'Eventos'">
+<x-layout-publico :titulo="$categoria?->nombre ?? __('Events')">
     <x-slot name="header">
         <h1 class="text-2xl font-semibold">
-            {{ $categoria?->nombre ?? 'Próximos eventos' }}
+            {{ $categoria?->nombre ?? __('Upcoming Events') }}
         </h1>
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {{ $eventos->total() }} {{ Str::plural('evento', $eventos->total()) }} con inscripción abierta
+            {{ trans_choice(':count event with open registration|:count events with open registration', $eventos->total(), ['count' => $eventos->total()]) }}
         </p>
     </x-slot>
 
     <nav class="flex flex-wrap gap-2 mb-8 text-sm">
         <a href="{{ route('eventos.index') }}"
            class="px-3 py-1.5 rounded-full {{ $categoria === null ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700' }}">
-            Todas
+            {{ __('All') }}
         </a>
 
         @foreach ($categorias as $cat)
@@ -24,7 +24,7 @@
 
     @if ($eventos->isEmpty())
         <div class="bg-white dark:bg-gray-800 rounded-lg p-10 text-center text-gray-500 dark:text-gray-400">
-            Todavía no hay eventos publicados en esta sección.
+            {{ __('No events published in this section yet.') }}
         </div>
     @else
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

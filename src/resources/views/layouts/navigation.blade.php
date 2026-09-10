@@ -13,27 +13,27 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        Panel
+                        {{ __('Dashboard') }}
                     </x-nav-link>
 
                     <x-nav-link :href="route('eventos.index')" :active="request()->routeIs('eventos.*')">
-                        Eventos
+                        {{ __('Events') }}
                     </x-nav-link>
 
                     <x-nav-link :href="route('inscripciones.index')" :active="request()->routeIs('inscripciones.*')">
-                        Mis inscripciones
+                        {{ __('My Registrations') }}
                     </x-nav-link>
 
                     {{-- Los Gates deciden que se ve: mismo criterio que el can: de las rutas. --}}
                     @can('crear eventos')
                         <x-nav-link :href="route('panel.eventos.index')" :active="request()->routeIs('panel.*')">
-                            Organizar
+                            {{ __('Organize') }}
                         </x-nav-link>
                     @endcan
 
                     @can('ver-panel-admin')
                         <x-nav-link :href="route('admin.categorias.index')" :active="request()->routeIs('admin.*')">
-                            Administrar
+                            {{ __('Manage') }}
                         </x-nav-link>
                     @endcan
                 </div>
@@ -65,7 +65,7 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('perfil.edit')">
-                            {{ __('Mi perfil') }}
+                            {{ __('My Profile') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -98,26 +98,26 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                Panel
+                {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link :href="route('eventos.index')" :active="request()->routeIs('eventos.*')">
-                Eventos
+                {{ __('Events') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link :href="route('inscripciones.index')" :active="request()->routeIs('inscripciones.*')">
-                Mis inscripciones
+                {{ __('My Registrations') }}
             </x-responsive-nav-link>
 
             @can('crear eventos')
                 <x-responsive-nav-link :href="route('panel.eventos.index')" :active="request()->routeIs('panel.*')">
-                    Organizar
+                    {{ __('Organize') }}
                 </x-responsive-nav-link>
             @endcan
 
             @can('ver-panel-admin')
                 <x-responsive-nav-link :href="route('admin.categorias.index')" :active="request()->routeIs('admin.*')">
-                    Administrar
+                    {{ __('Manage') }}
                 </x-responsive-nav-link>
             @endcan
         </div>
@@ -142,7 +142,7 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('perfil.edit')">
-                    {{ __('Mi perfil') }}
+                    {{ __('My Profile') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->

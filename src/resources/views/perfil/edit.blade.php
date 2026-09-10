@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Mi perfil') }}
+            {{ __('My Profile') }}
         </h2>
     </x-slot>
 
@@ -10,7 +10,7 @@
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <header>
                     <p class="text-sm text-gray-600 dark:text-gray-400">
-                        {{ __('Datos adicionales de tu perfil: telefono, institucion, avatar y bio.') }}
+                        {{ __('Additional profile details: phone, institution, avatar and bio.') }}
                     </p>
                 </header>
 
@@ -46,14 +46,14 @@
                     </div>
 
                     <div>
-                        <x-input-label for="telefono" :value="__('Telefono')" />
+                        <x-input-label for="telefono" :value="__('Phone')" />
                         <x-text-input id="telefono" name="telefono" type="text" class="mt-1 block w-full" maxlength="20"
                                       :value="old('telefono', $perfil?->telefono)" />
                         <x-input-error class="mt-2" :messages="$errors->get('telefono')" />
                     </div>
 
                     <div>
-                        <x-input-label for="institucion" :value="__('Institucion')" />
+                        <x-input-label for="institucion" :value="__('Institution')" />
                         <x-text-input id="institucion" name="institucion" type="text" class="mt-1 block w-full" maxlength="255"
                                       :value="old('institucion', $perfil?->institucion)" />
                         <x-input-error class="mt-2" :messages="$errors->get('institucion')" />
@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <x-primary-button>{{ __('Guardar') }}</x-primary-button>
+                        <x-primary-button>{{ __('Save') }}</x-primary-button>
 
                         @if (session('status') === 'perfil-actualizado')
                             <p
@@ -76,7 +76,7 @@
                                 x-transition
                                 x-init="setTimeout(() => show = false, 2000)"
                                 class="text-sm text-gray-600 dark:text-gray-400"
-                            >{{ __('Guardado.') }}</p>
+                            >{{ __('Saved.') }}</p>
                         @endif
                     </div>
                 </form>

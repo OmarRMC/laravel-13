@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Editar: {{ $evento->titulo }}
+            {{ __('Edit: :title', ['title' => $evento->titulo]) }}
         </h2>
     </x-slot>
 
@@ -15,9 +15,9 @@
                     @include('panel.eventos.partials.form')
 
                     <div class="mt-8 flex items-center gap-4">
-                        <x-primary-button>Guardar cambios</x-primary-button>
+                        <x-primary-button>{{ __('Save Changes') }}</x-primary-button>
                         <a href="{{ route('panel.eventos.index') }}"
-                           class="text-sm text-gray-600 dark:text-gray-400 hover:underline">Volver</a>
+                           class="text-sm text-gray-600 dark:text-gray-400 hover:underline">{{ __('Back') }}</a>
                     </div>
                 </form>
             </div>

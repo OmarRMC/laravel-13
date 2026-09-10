@@ -17,39 +17,39 @@
     <div class="grid gap-8 lg:grid-cols-3">
 
         <div class="lg:col-span-2 bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6">
-            <h2 class="font-semibold mb-3">Descripción</h2>
+            <h2 class="font-semibold mb-3">{{ __('Description') }}</h2>
             <p class="text-sm leading-relaxed whitespace-pre-line text-gray-700 dark:text-gray-300">
                 {{ $evento->descripcion }}
             </p>
 
             <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                Organiza {{ $evento->organizador->name }}
+                {{ __('Organized by :name', ['name' => $evento->organizador->name]) }}
             </p>
         </div>
 
         <aside class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6 space-y-4 h-fit">
             <dl class="space-y-3 text-sm">
                 <div>
-                    <dt class="text-gray-500 dark:text-gray-400">Empieza</dt>
+                    <dt class="text-gray-500 dark:text-gray-400">{{ __('Starts') }}</dt>
                     <dd class="font-medium">{{ $evento->inicia_el->format('d/m/Y H:i') }}</dd>
                 </div>
                 @if ($evento->termina_el)
                     <div>
-                        <dt class="text-gray-500 dark:text-gray-400">Termina</dt>
+                        <dt class="text-gray-500 dark:text-gray-400">{{ __('Ends') }}</dt>
                         <dd class="font-medium">{{ $evento->termina_el->format('d/m/Y H:i') }}</dd>
                     </div>
                 @endif
                 <div>
-                    <dt class="text-gray-500 dark:text-gray-400">Lugar</dt>
+                    <dt class="text-gray-500 dark:text-gray-400">{{ __('Location') }}</dt>
                     <dd class="font-medium">{{ $evento->lugar }} ({{ $evento->modalidad }})</dd>
                 </div>
                 <div>
-                    <dt class="text-gray-500 dark:text-gray-400">Precio</dt>
-                    <dd class="font-medium">{{ $evento->es_gratuito ? 'Gratuito' : 'Bs '.$evento->precio }}</dd>
+                    <dt class="text-gray-500 dark:text-gray-400">{{ __('Price') }}</dt>
+                    <dd class="font-medium">{{ $evento->es_gratuito ? __('Free') : 'Bs '.$evento->precio }}</dd>
                 </div>
                 <div>
-                    <dt class="text-gray-500 dark:text-gray-400">Plazas</dt>
-                    <dd class="font-medium">{{ max($plazasLibres, 0) }} de {{ $evento->cupo }}</dd>
+                    <dt class="text-gray-500 dark:text-gray-400">{{ __('Spots') }}</dt>
+                    <dd class="font-medium">{{ __(':available of :total', ['available' => max($plazasLibres, 0), 'total' => $evento->cupo]) }}</dd>
                 </div>
             </dl>
 
@@ -57,17 +57,17 @@
                 @guest
                     <a href="{{ route('login') }}"
                        class="block text-center px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-500">
-                        Entra para inscribirte
+                        {{ __('Log in to register') }}
                     </a>
                 @endguest
 
                 @auth
                     @if ($miInscripcion && $miInscripcion->estado !== 'cancelada')
                         <p class="text-sm mb-3">
-                            Estás inscrito · <x-estado-badge :estado="$miInscripcion->estado" />
+                            {{ __('You are registered') }} · <x-estado-badge :estado="$miInscripcion->estado" />
                         </p>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                            Código: <span class="font-mono">{{ $miInscripcion->codigo }}</span>
+                            {{ __('Code') }}: <span class="font-mono">{{ $miInscripcion->codigo }}</span>
                         </p>
 
                         {{-- Ruta 26: cancelar es PATCH, no DELETE. --}}
@@ -75,7 +75,7 @@
                             @csrf
                             @method('PATCH')
                             <button class="w-full px-4 py-2 rounded-md border border-red-300 text-red-700 dark:text-red-300 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/30">
-                                Cancelar inscripción
+                                {{ __('Cancel Registration') }}
                             </button>
                         </form>
                     @else
@@ -83,7 +83,7 @@
                         <form method="POST" action="{{ route('inscripciones.store', $evento) }}">
                             @csrf
                             <button class="w-full px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-500">
-                                Inscribirme
+                                {{ __('Register for Event') }}
                             </button>
                         </form>
                     @endif

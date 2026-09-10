@@ -2,11 +2,11 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Categorías
+                {{ __('Categories') }}
             </h2>
             <a href="{{ route('admin.categorias.create') }}"
                class="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm hover:bg-indigo-500">
-                Nueva categoría
+                {{ __('New Category') }}
             </a>
         </div>
     </x-slot>
@@ -18,15 +18,15 @@
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg overflow-hidden">
                 @if ($categorias->isEmpty())
                     <div class="p-10 text-center text-gray-500 dark:text-gray-400">
-                        Sin categorías. Crea la primera para poder publicar eventos.
+                        {{ __('No categories. Create the first one to be able to publish events.') }}
                     </div>
                 @else
                     <table class="w-full text-sm text-left">
                         <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase text-gray-500 dark:text-gray-400">
                             <tr>
-                                <th class="px-6 py-3">Nombre</th>
-                                <th class="px-6 py-3">Slug</th>
-                                <th class="px-6 py-3">Eventos</th>
+                                <th class="px-6 py-3">{{ __('Name') }}</th>
+                                <th class="px-6 py-3">{{ __('Slug') }}</th>
+                                <th class="px-6 py-3">{{ __('Events') }}</th>
                                 <th class="px-6 py-3"></th>
                             </tr>
                         </thead>
@@ -45,18 +45,18 @@
                                     <td class="px-6 py-4">
                                         <div class="flex items-center justify-end gap-4">
                                             <a href="{{ route('admin.categorias.edit', $categoria) }}"
-                                               class="text-indigo-600 dark:text-indigo-400 hover:underline">Editar</a>
+                                               class="text-indigo-600 dark:text-indigo-400 hover:underline">{{ __('Edit') }}</a>
 
                                             {{-- categoria_id es restrictOnDelete: con eventos, el borrado falla. --}}
                                             @if ($categoria->eventos_count === 0)
                                                 <form method="POST" action="{{ route('admin.categorias.destroy', $categoria) }}"
-                                                      onsubmit="return confirm('¿Eliminar esta categoría?')">
+                                                      onsubmit="return confirm('{{ __('Delete this category?') }}')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="text-red-600 dark:text-red-400 hover:underline">Eliminar</button>
+                                                    <button class="text-red-600 dark:text-red-400 hover:underline">{{ __('Delete') }}</button>
                                                 </form>
                                             @else
-                                                <span class="text-xs text-gray-400">Tiene eventos</span>
+                                                <span class="text-xs text-gray-400">{{ __('Has events') }}</span>
                                             @endif
                                         </div>
                                     </td>

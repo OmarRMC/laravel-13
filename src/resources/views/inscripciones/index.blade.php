@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Mis inscripciones
+            {{ __('My Registrations') }}
         </h2>
     </x-slot>
 
@@ -12,19 +12,19 @@
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg overflow-hidden">
                 @if ($inscripciones->isEmpty())
                     <div class="p-10 text-center text-gray-500 dark:text-gray-400">
-                        Todavía no te has inscrito en ningún evento.
+                        {{ __("You haven't registered for any event yet.") }}
                         <a href="{{ route('eventos.index') }}" class="text-indigo-600 dark:text-indigo-400 hover:underline">
-                            Ver el catálogo
+                            {{ __('View Catalog') }}
                         </a>
                     </div>
                 @else
                     <table class="w-full text-sm text-left">
                         <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase text-gray-500 dark:text-gray-400">
                             <tr>
-                                <th class="px-6 py-3">Evento</th>
-                                <th class="px-6 py-3">Fecha</th>
-                                <th class="px-6 py-3">Código</th>
-                                <th class="px-6 py-3">Estado</th>
+                                <th class="px-6 py-3">{{ __('Event') }}</th>
+                                <th class="px-6 py-3">{{ __('Date') }}</th>
+                                <th class="px-6 py-3">{{ __('Code') }}</th>
+                                <th class="px-6 py-3">{{ __('Status') }}</th>
                                 <th class="px-6 py-3"></th>
                             </tr>
                         </thead>
@@ -49,14 +49,14 @@
                                             {{-- Ruta 27: el certificado solo existe con asistencia registrada. --}}
                                             <a href="{{ route('certificado', $evento) }}"
                                                class="text-indigo-600 dark:text-indigo-400 hover:underline">
-                                                Certificado
+                                                {{ __('Certificate') }}
                                             </a>
                                         @elseif ($evento->pivot->estado !== 'cancelada')
                                             <form method="POST" action="{{ route('inscripciones.cancelar', $evento) }}">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button class="text-red-600 dark:text-red-400 hover:underline">
-                                                    Cancelar
+                                                    {{ __('Cancel') }}
                                                 </button>
                                             </form>
                                         @endif

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Usuarios
+            {{ __('Users') }}
         </h2>
     </x-slot>
 
@@ -11,17 +11,17 @@
 
             <form method="GET" class="flex gap-2">
                 <x-text-input name="q" type="search" class="w-full sm:w-80"
-                              :value="request('q')" placeholder="Buscar por nombre" />
-                <x-primary-button>Buscar</x-primary-button>
+                              :value="request('q')" :placeholder="__('Search by name')" />
+                <x-primary-button>{{ __('Search') }}</x-primary-button>
             </form>
 
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg overflow-hidden">
                 <table class="w-full text-sm text-left">
                     <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase text-gray-500 dark:text-gray-400">
                         <tr>
-                            <th class="px-6 py-3">Usuario</th>
-                            <th class="px-6 py-3">Roles</th>
-                            <th class="px-6 py-3">Estado</th>
+                            <th class="px-6 py-3">{{ __('User') }}</th>
+                            <th class="px-6 py-3">{{ __('Roles') }}</th>
+                            <th class="px-6 py-3">{{ __('Status') }}</th>
                             <th class="px-6 py-3"></th>
                         </tr>
                     </thead>
@@ -39,26 +39,26 @@
                                                 {{ $rol->nombre }}
                                             </span>
                                         @empty
-                                            <span class="text-xs text-gray-400">Sin rol</span>
+                                            <span class="text-xs text-gray-400">{{ __('No role') }}</span>
                                         @endforelse
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     @if ($usuario->activo)
-                                        <span class="inline-flex rounded-full bg-green-100 dark:bg-green-900 px-2 py-0.5 text-xs text-green-800 dark:text-green-200">Activo</span>
+                                        <span class="inline-flex rounded-full bg-green-100 dark:bg-green-900 px-2 py-0.5 text-xs text-green-800 dark:text-green-200">{{ __('Active') }}</span>
                                     @else
-                                        <span class="inline-flex rounded-full bg-red-100 dark:bg-red-900 px-2 py-0.5 text-xs text-red-800 dark:text-red-200">Desactivado</span>
+                                        <span class="inline-flex rounded-full bg-red-100 dark:bg-red-900 px-2 py-0.5 text-xs text-red-800 dark:text-red-200">{{ __('Disabled') }}</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <a href="{{ route('admin.usuarios.edit', $usuario) }}"
-                                       class="text-indigo-600 dark:text-indigo-400 hover:underline">Editar</a>
+                                       class="text-indigo-600 dark:text-indigo-400 hover:underline">{{ __('Edit') }}</a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
                                 <td colspan="4" class="px-6 py-10 text-center text-gray-500 dark:text-gray-400">
-                                    Ningún usuario coincide con la búsqueda.
+                                    {{ __('No user matches the search.') }}
                                 </td>
                             </tr>
                         @endforelse

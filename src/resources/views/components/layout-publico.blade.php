@@ -25,22 +25,22 @@
             <div class="flex items-center gap-4 text-sm">
                 <a href="{{ route('eventos.index') }}"
                    class="{{ request()->routeIs('eventos.*') ? 'font-semibold text-indigo-600 dark:text-indigo-400' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' }}">
-                    Eventos
+                    {{ __('Events') }}
                 </a>
 
                 @auth
                     <a href="{{ route('dashboard') }}"
                        class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
-                        Mi panel
+                        {{ __('My Panel') }}
                     </a>
                 @else
                     <a href="{{ route('login') }}"
                        class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
-                        Entrar
+                        {{ __('Log in') }}
                     </a>
                     <a href="{{ route('register') }}"
                        class="px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-500">
-                        Registrarse
+                        {{ __('Register') }}
                     </a>
                 @endauth
             </div>

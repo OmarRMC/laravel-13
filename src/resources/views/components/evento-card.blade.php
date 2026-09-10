@@ -28,12 +28,12 @@
 
     <div class="px-5 py-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-sm">
         <span class="font-medium">
-            {{ $evento->es_gratuito ? 'Gratuito' : 'Bs '.$evento->precio }}
+            {{ $evento->es_gratuito ? __('Free') : 'Bs '.$evento->precio }}
         </span>
 
         <a href="{{ route('eventos.show', $evento) }}"
            class="text-indigo-600 dark:text-indigo-400 hover:underline">
-            Ver detalle
+            {{ __('View Details') }}
         </a>
     </div>
 </article>

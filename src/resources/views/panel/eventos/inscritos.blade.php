@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Inscritos · {{ $evento->titulo }}
+            {{ __('Registrants') }} · {{ $evento->titulo }}
         </h2>
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {{ $inscritos->total() }} de {{ $evento->cupo }} plazas
+            {{ __(':count of :total spots', ['count' => $inscritos->total(), 'total' => $evento->cupo]) }}
         </p>
     </x-slot>
 
@@ -15,31 +15,31 @@
             <div class="flex flex-wrap gap-3 text-sm">
                 <a href="{{ route('panel.eventos.pdf', $evento) }}"
                    class="px-3 py-1.5 rounded-md bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    Descargar PDF
+                    {{ __('Download PDF') }}
                 </a>
                 <a href="{{ route('panel.eventos.excel', $evento) }}"
                    class="px-3 py-1.5 rounded-md bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    Descargar Excel
+                    {{ __('Download Excel') }}
                 </a>
                 <a href="{{ route('panel.eventos.index') }}"
                    class="px-3 py-1.5 text-gray-600 dark:text-gray-400 hover:underline">
-                    Volver
+                    {{ __('Back') }}
                 </a>
             </div>
 
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg overflow-hidden">
                 @if ($inscritos->isEmpty())
                     <div class="p-10 text-center text-gray-500 dark:text-gray-400">
-                        Nadie se ha inscrito todavía.
+                        {{ __('No one has registered yet.') }}
                     </div>
                 @else
                     <table class="w-full text-sm text-left">
                         <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase text-gray-500 dark:text-gray-400">
                             <tr>
-                                <th class="px-6 py-3">Participante</th>
-                                <th class="px-6 py-3">Código</th>
-                                <th class="px-6 py-3">Estado</th>
-                                <th class="px-6 py-3">Asistencia</th>
+                                <th class="px-6 py-3">{{ __('Participant') }}</th>
+                                <th class="px-6 py-3">{{ __('Code') }}</th>
+                                <th class="px-6 py-3">{{ __('Status') }}</th>
+                                <th class="px-6 py-3">{{ __('Attendance') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
@@ -58,7 +58,7 @@
                                             @csrf
                                             @method('PATCH')
                                             <button class="text-sm {{ $inscrito->pivot->asistio ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400' }} hover:underline">
-                                                {{ $inscrito->pivot->asistio ? 'Asistió' : 'Marcar asistencia' }}
+                                                {{ $inscrito->pivot->asistio ? __('Attended') : __('Mark Attendance') }}
                                             </button>
                                         </form>
                                     </td>

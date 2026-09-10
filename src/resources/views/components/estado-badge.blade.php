@@ -10,11 +10,21 @@
         'confirmada' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
         'cancelada'  => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
     ];
+
+    $etiquetas = [
+        'borrador'   => __('Draft'),
+        'publicado'  => __('Published'),
+        'cerrado'    => __('Closed'),
+        'cancelado'  => __('Cancelled'),
+        'pendiente'  => __('Pending'),
+        'confirmada' => __('Confirmed'),
+        'cancelada'  => __('Cancelled'),
+    ];
 @endphp
 
 <span {{ $attributes->class([
     'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
     $colores[$estado] ?? 'bg-gray-100 text-gray-700',
 ]) }}>
-    {{ ucfirst($estado) }}
+    {{ $etiquetas[$estado] ?? ucfirst($estado) }}
 </span>

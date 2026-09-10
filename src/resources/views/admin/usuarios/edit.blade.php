@@ -15,7 +15,7 @@
                     @method('PUT')
 
                     <fieldset>
-                        <legend class="font-medium mb-3">Roles</legend>
+                        <legend class="font-medium mb-3">{{ __('Roles') }}</legend>
 
                         <div class="space-y-2">
                             @foreach ($roles as $rol)
@@ -34,26 +34,25 @@
                     </fieldset>
 
                     <fieldset class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
-                        <legend class="font-medium mb-3">Acceso</legend>
+                        <legend class="font-medium mb-3">{{ __('Access') }}</legend>
 
                         <label class="inline-flex items-center">
                             <input type="hidden" name="activo" value="0">
                             <input type="checkbox" name="activo" value="1"
                                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
                                    @checked(old('activo', $usuario->activo))>
-                            <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Cuenta activa</span>
+                            <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Active account') }}</span>
                         </label>
 
                         <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                            Al desmarcarla, el middleware <code>activo</code> cierra su sesión en la
-                            siguiente petición. No se borra nada: sus eventos e inscripciones siguen ahí.
+                            {!! __('Unchecking it makes the :field middleware log the user out on the next request. Nothing is deleted: their events and registrations remain.', ['field' => '<code>activo</code>']) !!}
                         </p>
                     </fieldset>
 
                     <div class="mt-8 flex items-center gap-4">
-                        <x-primary-button>Guardar</x-primary-button>
+                        <x-primary-button>{{ __('Save') }}</x-primary-button>
                         <a href="{{ route('admin.usuarios.index') }}"
-                           class="text-sm text-gray-600 dark:text-gray-400 hover:underline">Volver</a>
+                           class="text-sm text-gray-600 dark:text-gray-400 hover:underline">{{ __('Back') }}</a>
                     </div>
                 </form>
             </div>
