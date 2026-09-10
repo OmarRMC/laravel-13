@@ -43,6 +43,8 @@
                         {{ __('Register') }}
                     </a>
                 @endauth
+
+                <x-language-switcher />
             </div>
         </div>
     </nav>

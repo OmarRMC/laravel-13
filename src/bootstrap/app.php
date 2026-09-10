@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'activo'              => \App\Http\Middleware\Activo::class,
             'inscripcion.abierta' => \App\Http\Middleware\InscripcionAbierta::class,
         ]);
+
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

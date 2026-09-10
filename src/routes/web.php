@@ -6,6 +6,7 @@ use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\InscripcionController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Panel\EventoController as PanelEventoController;
 use App\Http\Controllers\Panel\InscritoController;
 use App\Http\Controllers\Panel\ReporteController;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [EventoController::class, 'index'])->name('home');
 Route::get('/eventos', [EventoController::class, 'index'])->name('eventos.index');
+Route::get('/idioma/{locale}', LocaleController::class)->name('locale.switch');
 
 
 Route::get('/eventos/categoria/{categoria?}', [EventoController::class, 'index'])
