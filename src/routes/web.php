@@ -9,6 +9,7 @@ use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\Panel\EventoController as PanelEventoController;
 use App\Http\Controllers\Panel\InscritoController;
 use App\Http\Controllers\Panel\ReporteController;
+use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,9 @@ Route::middleware(['auth', 'activo'])->group(function () {
     Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/mi-perfil', [PerfilController::class, 'edit'])->name('perfil.edit');
+    Route::patch('/mi-perfil', [PerfilController::class, 'update'])->name('perfil.update');
 
     Route::get('/mis-inscripciones', [InscripcionController::class, 'index'])
         ->name('inscripciones.index');
