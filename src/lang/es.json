@@ -133,5 +133,13 @@
     "Confirm": "Confirmar",
     "Reset Password": "Restablecer contraseña",
     "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.": "¿Olvidaste tu contraseña? No hay problema. Solo indícanos tu dirección de correo electrónico y te enviaremos un enlace para restablecerla y elegir una nueva.",
-    "Email Password Reset Link": "Enviar enlace de restablecimiento de contraseña"
+    "Email Password Reset Link": "Enviar enlace de restablecimiento de contraseña",
+    "Certificate of Participation": "Certificado de Participación",
+    "This certifies that": "El presente certifica que",
+    "participated in the event": "participó en el evento",
+    ":date at :place": ":date en :place",
+    ":count registrants": ":count inscritos",
+    "Registered on": "Inscrito el",
+    "Yes": "Sí",
+    "No": "No"
 }

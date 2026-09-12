@@ -52,6 +52,8 @@ class EventoController extends Controller
     /** formulario de edicion. */
     public function edit(Evento $evento): View
     {
+        $this->authorize('update', $evento);
+
         return view('panel.eventos.edit', [
             'evento'     => $evento,
             'categorias' => Categoria::orderBy('nombre')->get(),
@@ -61,6 +63,8 @@ class EventoController extends Controller
     /** guarda cambios, incluido `estado` (borrador -> publicado). */
     public function update(Request $request, Evento $evento): RedirectResponse
     {
+        $this->authorize('update', $evento);
+
         $datos = $this->validar($request);
 
         if ($datos['titulo'] !== $evento->titulo) {
@@ -77,6 +81,8 @@ class EventoController extends Controller
     /** elimina el evento; el pivote cae por cascadeOnDelete. */
     public function destroy(Evento $evento): RedirectResponse
     {
+        $this->authorize('update', $evento);
+
         $evento->delete();
 
         return redirect()

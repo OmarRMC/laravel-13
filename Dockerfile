@@ -9,8 +9,9 @@ ARG GID=1000
 # Nota: docker-php-ext-install compila, por eso hace falta $PHPIZE_DEPS.
 RUN apk add --no-cache \
         bash git unzip nodejs npm \
-        $PHPIZE_DEPS icu-dev libzip-dev libpq-dev \
- && docker-php-ext-install -j"$(nproc)" pdo_pgsql bcmath intl zip \
+        $PHPIZE_DEPS icu-dev libzip-dev libpq-dev libpng-dev libjpeg-turbo-dev freetype-dev \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install -j"$(nproc)" pdo_pgsql bcmath intl zip gd \
  && printf "memory_limit=512M\nupload_max_filesize=100M\npost_max_size=100M\n" \
         > /usr/local/etc/php/conf.d/99-app.ini
 

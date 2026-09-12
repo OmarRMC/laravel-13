@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Evento;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-
+use Symfony\Component\HttpFoundation\Response;
 
 class CertificadoController extends Controller
 {
@@ -19,6 +19,11 @@ class CertificadoController extends Controller
 
         abort_unless($inscripcion->asistio, 403, 'No hay asistencia registrada en este evento.');
 
-        abort(501, 'Generacion de certificados pendiente .');
+        return Pdf::loadView('certificados.certificado', [
+            'evento'       => $evento->load('organizador'),
+            'participante' => $request->user(),
+            'codigo'       => $inscripcion->codigo,
+        ])->setPaper('a4', 'landscape')
+          ->download("certificado-{$evento->slug}.pdf");
     }
 }

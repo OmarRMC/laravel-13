@@ -13,7 +13,8 @@ class InscritoController extends Controller
     /** `/panel/eventos/{evento}/inscritos` */
     public function index(Evento $evento): View
     {
-        // $this->authorize('update', $evento);
+        $this->authorize('update', $evento);
+
         return view('panel.eventos.inscritos', [
             'evento'    => $evento,
             'inscritos' => $evento->inscritos()->orderBy('name')->paginate(25),
@@ -25,6 +26,8 @@ class InscritoController extends Controller
      */
     public function asistencia(Evento $evento, User $inscrito): RedirectResponse
     {
+        $this->authorize('update', $evento);
+
         $asistio = !$inscrito->pivot->asistio;
 
         $evento->inscritos()->updateExistingPivot($inscrito->id, ['asistio' => $asistio]);
