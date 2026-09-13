@@ -13,6 +13,7 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./src:/var/www/html
+      - /var/www/html/vendor
     ports:
       - "${APP_PORT:-8000}:8000"     # aplicacion
       - "${VITE_PORT:-5173}:5173"    # Vite / HMR

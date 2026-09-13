@@ -22,6 +22,15 @@ RUN addgroup -g ${GID} app \
  && adduser -u ${UID} -G app -s /bin/bash -D app
 
 WORKDIR /var/www/html
+
+# Copiar código fuente e instalar dependencias como root
+COPY src/ .
+RUN composer install --optimize-autoloader \
+ && npm ci \
+ && npm run build \
+ && rm -rf node_modules \
+ && chown -R app:app /var/www/html
+
 USER app
 
 EXPOSE 8000
