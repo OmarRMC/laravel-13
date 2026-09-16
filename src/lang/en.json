@@ -141,5 +141,9 @@
     ":count registrants": ":count registrants",
     "Registered on": "Registered on",
     "Yes": "Yes",
-    "No": "No"
+    "No": "No",
+    "You are already registered for this event.": "You are already registered for this event.",
+    "This event is not open for registration.": "This event is not open for registration.",
+    "The registration deadline has passed.": "The registration deadline has passed.",
+    "No spots available.": "No spots available."
 }

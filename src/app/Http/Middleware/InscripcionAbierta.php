@@ -19,12 +19,12 @@ class InscripcionAbierta
 
         // 1 · Solo se admiten inscripciones en eventos publicados.
         if ($evento->estado !== 'publicado') {
-            return back()->with('error', 'Este evento no admite inscripciones.');
+            return $this->rechazar($request, __('This event is not open for registration.'));
         }
 
         // 2 · No se puede entrar a algo que ya empezo.
         if ($evento->inicia_el->isPast()) {
-            return back()->with('error', 'El plazo de inscripcion ya se cerro.');
+            return $this->rechazar($request, __('The registration deadline has passed.'));
         }
 
         // 3 · Cupo. Las canceladas liberan plaza, por eso no cuentan.
@@ -33,9 +33,22 @@ class InscripcionAbierta
             ->count();
 
         if ($ocupadas >= $evento->cupo) {
-            return back()->with('error', 'No quedan plazas disponibles.');
+            return $this->rechazar($request, __('No spots available.'));
         }
 
         return $next($request);
+    }
+
+    /**
+     * Un cliente de API (Postman, la app movil) espera un error JSON, no una redireccion con
+     * flash de sesion: `back()` no significa nada para quien no tiene un "atras" de navegador.
+     */
+    private function rechazar(Request $request, string $mensaje): Response
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['message' => $mensaje], 422);
+        }
+
+        return back()->with('error', $mensaje);
     }
 }

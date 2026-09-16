@@ -3,7 +3,7 @@
         ? auth()->user()->inscripciones->firstWhere('id', $evento->id)?->pivot
         : null;
 
-    $plazasLibres = $evento->cupo - $evento->inscritos_count;
+    $plazasLibres = $evento->cuposDisponibles();
 @endphp
 
 <x-layout-publico :titulo="$evento->titulo">
