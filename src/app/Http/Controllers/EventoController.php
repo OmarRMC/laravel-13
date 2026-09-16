@@ -17,12 +17,13 @@ class EventoController extends Controller
     // eventos/categoria/categori-test1
     public function index(?Categoria $categoria = null): View
     {
+        $limit = request()->query('limit', 10);
         $eventos = Evento::query()
             ->publicado()
             ->proximos()
             ->when($categoria, fn ($q) => $q->where('categoria_id', $categoria->id))
             ->with(['categoria', 'organizador'])
-            ->paginate(1)
+            ->paginate($limit)
             ->withQueryString();
 
         return view('eventos.index', [
