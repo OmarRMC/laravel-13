@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InscripcionConfirmada;
 use App\Models\Evento;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -33,11 +35,13 @@ class InscripcionController extends Controller
         if ($evento->inscritos()->whereKey($user->id)->exists()) {
             return back()->with('error', 'Ya estabas inscrito en este evento.');
         }
+        $codigo = Str::upper(Str::random(12));
 
         $evento->inscritos()->attach($user->id, [
-            'codigo' => Str::upper(Str::random(12)),
+            'codigo' => $codigo,
             'estado' => 'confirmada',
         ]);
+        Mail::to($user)->queue(new InscripcionConfirmada($evento, $codigo));
 
         return back()->with('status', 'Inscripcion confirmada.');
     }
