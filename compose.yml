@@ -10,6 +10,7 @@ services:
         GID: ${GID:-1000}
     image: laravel13-app:${PHP_VERSION:-8.4}
     restart: unless-stopped
+    command: ["docker/start.sh", "${APP_ROLE:-all}"]
     working_dir: /var/www/html
     volumes:
       - ./src:/var/www/html
