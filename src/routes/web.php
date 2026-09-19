@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\McpTokenController;
 use App\Http\Controllers\Panel\EventoController as PanelEventoController;
 use App\Http\Controllers\Panel\InscritoController;
 use App\Http\Controllers\Panel\ReporteController;
@@ -34,6 +35,11 @@ Route::middleware(['auth', 'activo'])->group(function () {
 
     Route::get('/mi-perfil', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::patch('/mi-perfil', [PerfilController::class, 'update'])->name('perfil.update');
+
+    Route::post('/mi-perfil/mcp-token', [McpTokenController::class, 'store'])
+        ->name('mcp-token.store');
+    Route::delete('/mi-perfil/mcp-token', [McpTokenController::class, 'destroy'])
+        ->name('mcp-token.destroy');
 
     Route::get('/mis-inscripciones', [InscripcionController::class, 'index'])
         ->name('inscripciones.index');

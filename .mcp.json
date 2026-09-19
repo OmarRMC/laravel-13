@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "eventos": {
+      "type": "http",
+      "url": "http://localhost:8000/mcp/eventos",
+      "headers": {
+        "Authorization": "Bearer 1|5YYdXpA4rSV95uMwY3EXl7DExda2bZL2y8wXI8M5e7e95b13"
+      }
+    }
+  }
+}

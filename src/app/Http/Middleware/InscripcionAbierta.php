@@ -17,23 +17,10 @@ class InscripcionAbierta
             abort(404);
         }
 
-        // 1 · Solo se admiten inscripciones en eventos publicados.
-        if ($evento->estado !== 'publicado') {
-            return $this->rechazar($request, __('This event is not open for registration.'));
-        }
-
-        // 2 · No se puede entrar a algo que ya empezo.
-        if ($evento->inicia_el->isPast()) {
-            return $this->rechazar($request, __('The registration deadline has passed.'));
-        }
-
-        // 3 · Cupo. Las canceladas liberan plaza, por eso no cuentan.
-        $ocupadas = $evento->inscritos()
-            ->wherePivot('estado', '!=', 'cancelada')
-            ->count();
-
-        if ($ocupadas >= $evento->cupo) {
-            return $this->rechazar($request, __('No spots available.'));
+        // Publicado / no vencido / con cupo: misma regla que usa InscribirseEnEventoTool (MCP),
+        // que no pasa por este middleware al no tener una ruta HTTP real detras.
+        if ($mensaje = $evento->errorDeInscripcion()) {
+            return $this->rechazar($request, $mensaje);
         }
 
         return $next($request);
