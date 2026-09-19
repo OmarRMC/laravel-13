@@ -16,8 +16,10 @@ services:
       - /var/www/html/vendor
       - /var/www/html/public/build
     ports:
-      - "${APP_PORT:-8000}:8000"     # aplicacion
+      - "${APP_PORT:-8000}:8000"     # aplicacion (tambien el endpoint MCP: /mcp/eventos)
       - "${VITE_PORT:-5173}:5173"    # Vite / HMR
+      - "${MCP_INSPECTOR_UI_PORT:-6274}:6274"    # UI del MCP Inspector (php artisan mcp:inspector)
+      - "${MCP_INSPECTOR_PROXY_PORT:-6277}:6277" # proxy del MCP Inspector
     environment:
       # Sin esto el servidor embebido atiende una sola peticion a la vez
       PHP_CLI_SERVER_WORKERS: 4

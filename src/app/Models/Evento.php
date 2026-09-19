@@ -81,4 +81,25 @@ class Evento extends Model
     {
         return $this->cupo - $this->inscritos()->wherePivot('estado', '!=', 'cancelada')->count();
     }
+
+    /**
+     * Las 3 reglas para poder inscribirse, compartidas por el middleware `InscripcionAbierta`
+     * (rutas HTTP) y por `InscribirseEnEventoTool` (MCP, que no pasa por ningun middleware de ruta).
+     */
+    public function errorDeInscripcion(): ?string
+    {
+        if ($this->estado !== 'publicado') {
+            return __('This event is not open for registration.');
+        }
+
+        if ($this->inicia_el->isPast()) {
+            return __('The registration deadline has passed.');
+        }
+
+        if ($this->cuposDisponibles() <= 0) {
+            return __('No spots available.');
+        }
+
+        return null;
+    }
 }

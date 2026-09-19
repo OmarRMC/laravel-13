@@ -145,5 +145,15 @@
     "You are already registered for this event.": "Ya estabas inscrito en este evento.",
     "This event is not open for registration.": "Este evento no admite inscripciones.",
     "The registration deadline has passed.": "El plazo de inscripción ya se cerró.",
-    "No spots available.": "No quedan plazas disponibles."
+    "No spots available.": "No quedan plazas disponibles.",
+    "MCP connector token": "Token para conectores MCP",
+    "Paste it as the :header value in Claude.ai, ChatGPT, Codex CLI or Gemini CLI. It never expires: treat it like a password.": "Pegalo como valor de :header en Claude.ai, ChatGPT, Codex CLI o Gemini CLI. No expira: tratalo como una contraseña.",
+    "Copy it now: it will not be shown again.": "Copialo ahora: no se va a volver a mostrar.",
+    "Copy": "Copiar",
+    "Copied": "Copiado",
+    "You already have an active token (value hidden).": "Ya tenés un token activo (valor oculto).",
+    "Token revoked.": "Token revocado.",
+    "Generate token": "Generar token",
+    "Regenerate token": "Regenerar token",
+    "Revoke": "Revocar"
 }

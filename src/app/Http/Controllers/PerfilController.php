@@ -18,6 +18,10 @@ class PerfilController extends Controller
     {
         return view('perfil.edit', [
             'perfil' => $request->user()->perfil,
+            'tieneMcpToken' => $request->user()
+                ->tokens()
+                ->where('name', McpTokenController::NOMBRE_TOKEN)
+                ->exists(),
         ]);
     }
 
