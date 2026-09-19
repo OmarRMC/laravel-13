@@ -1,58 +1,140 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Arquitectura y funcionalidades — Agenda de Eventos e Inscripciones
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 1. Qué es
 
-## About Laravel
+Aplicación de gestión de eventos e inscripciones. Alguien publica un evento, otras personas se
+inscriben, y el organizador pasa lista y emite certificados. Monolito Laravel (PHP 8.3+) con Blade +
+Tailwind + Alpine.js en el front (sin framework SPA), PostgreSQL como base de datos, Redis como backend
+de colas, todo corriendo en Docker Compose en local y en una instancia EC2 en producción.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 2. Vista general de la arquitectura
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```
+Cliente (navegador)              Cliente API/MCP (Postman, asistente de IA, etc.)
+      │ sesión/cookie                    │ Bearer token
+      ▼                                  ▼
+  Rutas web (Blade)                Rutas API (/api/v1)  /  Rutas MCP
+      │                                  │                    │
+      ▼                                  ▼                    ▼
+  Controladores web          Controladores API          Servidor MCP
+  (Blade + validación)       (JSON + Sanctum)      (Tools / Resources / Prompts)
+      └──────────────┬───────────────────┴────────────────────┘
+                      ▼
+         Modelos Eloquent ── Policies ── Middleware
+                      │
+      ┌───────────────┼─────────────────┬───────────────────┐
+      ▼               ▼                 ▼                   ▼
+  PostgreSQL        Redis         Colas / Correo      Almacenamiento
+  (datos)        (colas/caché)   (envío asíncrono)   (afiches, S3-compatible)
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## 3. Dominios funcionales
 
-## Contributing
+### Eventos y catálogo
+- Listado público filtrable por categoría; ficha de evento accesible por un slug legible (no por id
+  numérico).
+- CRUD completo para quien organiza, restringido a sus propios eventos (un administrador puede
+  gestionar cualquiera).
+- Las reglas de negocio para poder inscribirse (evento publicado, fecha no vencida, cupo disponible)
+  están centralizadas en un único método del modelo, reutilizado tanto por el middleware que protege
+  las rutas HTTP como por la herramienta de inscripción del servidor MCP — evita tener la misma regla
+  duplicada en dos sitios que podrían desincronizarse.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Inscripciones
+- Alta y cancelación de inscripción por parte del usuario, con un listado de "mis inscripciones".
+- Panel del organizador: lista de inscritos por evento y marcado de asistencia (con verificación de
+  que la persona marcada esté realmente inscrita en ese evento concreto).
+- Certificado de participación en PDF, que solo se genera si hay asistencia registrada.
 
-## Code of Conduct
+### Administración
+- Gestión de categorías y de usuarios, en una zona aparte protegida por permisos de administrador.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Autenticación y usuarios
+- Registro, login, verificación de email y recuperación de contraseña.
+- Roles propios (no un paquete externo) con una tabla de roles y una tabla puente usuario-rol.
+- Los usuarios pueden desactivarse; un middleware bloquea a los usuarios inactivos en cada request
+  protegida.
+- Perfil extendido de usuario, además del perfil básico de cuenta.
+- Cada usuario puede emitir y revocar, desde su propio perfil, un token de API que también sirve para
+  autenticarse contra el servidor MCP.
 
-## Security Vulnerabilities
+### Reportes y exportación
+- Reporte de inscritos por evento en PDF.
+- Reporte de inscritos por evento en Excel.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Correo y procesos en segundo plano
+- Correo de confirmación al inscribirse y correo de recordatorio antes del evento.
+- Un job en cola que envía los recordatorios de forma asíncrona (Redis como backend de colas).
+- Dos tareas programadas: una diaria que dispara los recordatorios, y otra horaria que cierra
+  automáticamente los eventos cuya fecha ya pasó.
 
-## License
+### API REST
+- Endpoints públicos de solo lectura para eventos y categorías.
+- Endpoints protegidos con token (login, logout, mis inscripciones, inscribirse a un evento), sujetos
+  a las mismas reglas de negocio y al mismo filtro de "usuario activo" que la parte web.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Integración con IA (servidor MCP)
+- Un servidor expone la agenda de eventos como herramientas para un asistente de IA: buscar eventos,
+  listar categorías, consultar las propias inscripciones e inscribirse a un evento.
+- Expone además un recurso (el programa de un evento) y un prompt guiado (invitar a un amigo a un
+  evento).
+- Accesible en dos modos: local (para un cliente de línea de comandos o un inspector) y por HTTP,
+  protegido con el mismo sistema de tokens que la API REST.
+- Diseñado para no filtrar datos entre usuarios: "mis inscripciones" siempre se resuelve a partir del
+  usuario dueño del token de la petición, nunca de un parámetro que el cliente pudiera manipular.
+
+### Internacionalización
+- Selector de idioma y detección del idioma activo por request, con las cadenas de texto traducidas.
+
+## 4. Modelo de datos (resumen)
+
+- **Usuario** 1—1 **Perfil** (datos extendidos).
+- **Usuario** 1—N **Evento** (como organizador).
+- **Usuario** N—M **Evento** a través de una tabla de inscripciones, que además guarda datos propios de
+  la relación: un código de inscripción, el estado de la inscripción y si hubo asistencia.
+- **Usuario** N—M **Rol** a través de una tabla puente simple.
+- **Evento** N—1 **Categoría**.
+- Colas y caché resueltas en tablas propias (trabajos en cola, caché) además de Redis.
+
+## 5. Capas de permisos
+
+1. **Middleware de sesión**: exige estar autenticado y con la cuenta activa para cualquier zona
+   privada.
+2. **Autorización por acción** (policy del evento): un administrador puede todo; el resto solo puede
+   editar/gestionar los eventos que organiza.
+3. **Reglas de negocio del propio dominio**: un evento puede rechazar una inscripción aunque el usuario
+   tenga permiso de sobra, si ya no está publicado, si ya empezó o si no quedan cupos.
+
+## 6. Infraestructura
+
+- **Local**: Docker Compose con tres servicios — la aplicación (PHP), la base de datos (PostgreSQL) y
+  Redis. Un script de arranque soporta distintos modos (solo servidor web, solo worker de colas, solo
+  planificador de tareas, o los tres juntos).
+- **Producción**: una instancia en la nube (AWS EC2) aprovisionada con Terraform (infraestructura como
+  código) — crea la instancia, el grupo de seguridad con los puertos estrictamente necesarios y una IP
+  pública fija. La instalación de Docker y el despliegue de la aplicación dentro de esa instancia se
+  hacen aparte, por conexión remota segura.
+- **Almacenamiento**: compatible con almacenamiento de objetos tipo S3 para archivos (afiches, PDFs
+  generados).
+
+## 7. Integraciones y librerías externas relevantes
+
+| Pieza | Rol |
+|---|---|
+| PostgreSQL | Base de datos principal |
+| Redis | Backend de colas y caché |
+| Sistema de tokens de API | Autenticación de la API REST y del servidor MCP |
+| Librería de generación de PDF | Certificados y reportes |
+| Librería de exportación a Excel | Reporte de inscritos |
+| Librería de almacenamiento compatible S3 | Archivos subidos por los usuarios |
+| Docker Compose | Orquestación del entorno de ejecución |
+| Terraform | Aprovisionamiento de la infraestructura en la nube |
+
+## 8. Pendientes / posibles siguientes pasos
+
+- Ampliar la cobertura de pruebas automatizadas más allá de lo mínimo.
+- Confirmar si todos los correos deberían enviarse por cola (algunos podrían estar síncronos todavía).
+- Backend remoto para el estado de Terraform si en algún momento más de una persona administra la
+  infraestructura.
+- Base de datos gestionada aparte de la instancia, si el proyecto necesita alta disponibilidad o
+  backups automáticos sin gestionarlos a mano.
