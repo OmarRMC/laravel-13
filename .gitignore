@@ -26,3 +26,12 @@ desktop.ini
 /dump.sql
 /*.sql.gz
 /docs
+
+# Terraform (infra/)
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.*
+infra/*.tfvars
+!infra/terraform.tfvars.example
+infra/*.pem
+infra/crash.log

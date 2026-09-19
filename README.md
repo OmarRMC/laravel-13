@@ -56,6 +56,34 @@ docker compose down -v            # Igual + borra el volumen de PostgreSQL (¡pi
 docker compose restart app        # Reiniciar solo la app
 ```
 
+### Servidor, cola y scheduler juntos
+
+El contenedor `app` levanta de una vez el servidor HTTP, el worker de colas (`queue:work`) y el scheduler (`schedule:work`) — ver `docker/start.sh`. Con el `docker compose up -d` de arriba ya alcanza: `compose.yml` lo arranca con `command: ["docker/start.sh", "${APP_ROLE:-all}"]`, y por defecto `APP_ROLE` es `all`.
+
+El script acepta otros modos, por si se necesita correr una sola pieza (por ejemplo, separando cada proceso en su propio contenedor en un `compose.yml` de producción):
+
+```bash
+docker/start.sh app          # Solo el servidor HTTP
+docker/start.sh queue        # Solo el worker de colas
+docker/start.sh scheduler    # Solo el scheduler
+docker/start.sh all          # Los tres juntos (el default)
+```
+
+Para levantar el contenedor `app` en uno de esos modos en vez del default, sin tocar `compose.yml`, se sobrescribe `APP_ROLE`:
+
+```bash
+APP_ROLE=queue docker compose up -d app        # Es un "docker compose up -d" normal, pero solo con el worker
+APP_ROLE=scheduler docker compose up -d app    # o solo con el scheduler
+docker compose up -d app                       # Sin la variable, vuelve al default (all)
+```
+
+> Ojo: `APP_ROLE=queue docker compose up -d app` **recrea** el contenedor `app` reemplazando el que esté corriendo (no lo suma) — sirve para fijar qué corre ese contenedor, no para levantar un worker extra en paralelo. Para eso último, con el contenedor `all` ya corriendo, se le puede pedir un segundo proceso encima con `docker compose exec app docker/start.sh queue` (por ejemplo, para escalar el worker de colas).
+
+**Consideraciones:**
+- Todo corre en un solo contenedor: si el `queue:work` de fondo se cae, el contenedor sigue "sano" (el servidor sigue respondiendo) y Docker no lo reinicia solo — revisa `docker compose logs app` si sospechas que dejó de procesar la cola. Para producción real, donde cada proceso deba reiniciarse por su cuenta, conviene separar `queue`/`scheduler` en servicios propios dentro de `compose.yml`, reusando la misma imagen y solo cambiando el `command`.
+- Como `compose.yml` monta `./src` sobre `/var/www/html`, el permiso de ejecución de `docker/start.sh` depende del archivo en el host, no de lo que haga el `Dockerfile`. Si lo editas y deja de funcionar con `Permission denied`, corre `chmod +x src/docker/start.sh`.
+- El modo `all` evita `exec` a propósito: si el servidor reemplazara al proceso de `bash` con `exec`, el `trap` que limpia `queue:work`/`schedule:work` al parar el contenedor dejaría de ejecutarse y `docker compose stop`/`down` tendrían que forzar el cierre (`SIGKILL`) tras 10s en vez de cerrar limpio.
+
 ### Entrar al contenedor
 
 ```bash

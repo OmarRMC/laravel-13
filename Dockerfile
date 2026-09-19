@@ -29,9 +29,10 @@ RUN composer install --optimize-autoloader \
  && npm ci \
  && npm run build \
  && rm -rf node_modules \
+ && chmod +x docker/start.sh \
  && chown -R app:app /var/www/html
 
 USER app
 
 EXPOSE 8000
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["docker/start.sh", "app"]
