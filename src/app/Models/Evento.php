@@ -75,4 +75,10 @@ class Evento extends Model
             ->withPivot(['codigo', 'estado', 'asistio'])
             ->withTimestamps();
     }
+
+    /** Las canceladas liberan plaza: no cuentan contra el cupo. */
+    public function cuposDisponibles(): int
+    {
+        return $this->cupo - $this->inscritos()->wherePivot('estado', '!=', 'cancelada')->count();
+    }
 }

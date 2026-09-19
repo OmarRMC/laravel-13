@@ -141,5 +141,9 @@
     ":count registrants": ":count inscritos",
     "Registered on": "Inscrito el",
     "Yes": "Sí",
-    "No": "No"
+    "No": "No",
+    "You are already registered for this event.": "Ya estabas inscrito en este evento.",
+    "This event is not open for registration.": "Este evento no admite inscripciones.",
+    "The registration deadline has passed.": "El plazo de inscripción ya se cerró.",
+    "No spots available.": "No quedan plazas disponibles."
 }
